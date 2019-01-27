@@ -107,14 +107,13 @@ The Python installation should take approximately 1-2 hours to install on a reco
 ## Command lines
 
 ```
-o	python Supplementary_script_A.py sample1.sam sample1
-o	python Supplementary_script_A.py sample2.sam sample2
-o	python Supplementary_script_A.py sample3.sam sample3
-o	python Supplementary_script_A.py sample4.sam sample4
-o	python Supplementary_script_B.py sample1
-o	python Supplementary_script_B.py sample2
-o	python Supplementary_script_B.py sample3
-o	python Supplementary_script_B.py sample4
+-python Supplementary_script_A.py sample1.sam sample1
+-python Supplementary_script_A.py sample2.sam sample2
+-python Supplementary_script_A.py sample3.sam sample3
+-python Supplementary_script_A.py sample4.sam sample4
+-python Supplementary_script_B.py sample1
+-python Supplementary_script_B.py sample2
+-python Supplementary_script_B.py sample4
 
 ```
 
