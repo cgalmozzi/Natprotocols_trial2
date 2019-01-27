@@ -27,7 +27,7 @@ Supplementary script D (Total_Enrichment).
 Supplementary script E (Gene_Profiles).
 Supplementary script F (Binding_Detection).
 Supplementary script G (Metagene_Profiles).
-Supplementary script H build_references
+Supplementary script H (build_references)
 
 ```
 
@@ -58,10 +58,10 @@ Python is portable: it runs on many Unix variants, on Mac, and on Windows 2000 a
 # Installation Guide
 
 ```
-Download python 3.3.5 from: 
-https://www.python.org/downloads/
-Follow the instruction for installation according to your operating system:
-https://wiki.python.org/moin/BeginnersGuide/Download
+Download python 3.3.5 from:  https://www.python.org/downloads/
+
+Follow the instruction for installation according to your operating system: https://wiki.python.org/moin/BeginnersGuide/Download
+
 The Python installation should take approximately 1-2 hours to install on a recommended computer.
 
 ```
