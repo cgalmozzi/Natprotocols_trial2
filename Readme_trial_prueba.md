@@ -131,7 +131,8 @@ The expected run time for a demo on a recommended computer is approximately half
 
 # Expected output
 
-*Supplementary script A (Ribosome_Assignment).	
+## Supplementary script A (Ribosome_Assignment).
+	
 This script performs the general analysis of selective riboSeq data. Deep sequencing data must be (quality) trimmed and aligned first. The input file is a sam file (see provided data) given by Tophat2 performing alignment to the genome.  Based on the reference files used for genome alignment the function chromConversion must be adjusted.
 
 The output pickle file 'DictReads.pkl' is a combination of raw and normalized reads
@@ -154,7 +155,8 @@ Three output text files containing information on the footprint length distribut
 
 These four files serve as input files for the following scripts.
 
-+Supplementary script B (3_nt_Periodicity).
+## Supplementary script B (3_nt_Periodicity).
+
 This script calculates the average read density along all ORFs with nucleotide resolution. From -9nt to +30nt around the translation start side, data are plotted as bar plot with every third nucleotide colored in green. This should 
 help to visualize and analyse the expected 3nt periodicity of every (selective) ribosome profiling sample. 
 
