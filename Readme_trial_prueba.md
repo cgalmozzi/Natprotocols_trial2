@@ -162,13 +162,15 @@ help to visualize and analyse the expected 3nt periodicity of every (selective) 
 
 The output graph is saved as png file and as pdf file, with position along ORF [nt] in x-axis and average reads [a.u.]in y-axis.
 
-+Supplementary script C (Footprint_Length_Distribution).
+## Supplementary script C (Footprint_Length_Distribution).
+
 This script compares the read length distribution of a given deep sequencing 
 data set (e.g. ribosome profiling or selective ribosome profiling) and plots the result as histogram. 
 
 The output graph is saved as png file and as pdf file, with footprint length [nt] in x-axis and reads [*1,000,000] in y-axis.
 
-+Supplementary script D (Total_Enrichment).
+## Supplementary script D (Total_Enrichment).
+
 This script calculates the total enrichment (TE) value for each gene comparing two biological replicates of total and selective samples.
 
 The output is a text file with the following columns:
@@ -187,12 +189,14 @@ number of samples with 'included'
 
 Note: If the ratio, the average or the log2 transform cannot be calculated due to e.g. zero footprints for a gene, the respective value is given as 'n.a.'.
 
-+Supplementary script E (Gene_Profiles).
+## Supplementary script E (Gene_Profiles).
+
 This script generates an enrichment profile for each gene of the given organism. All genes, even those with a read number lower than the given threshold (default: 64) in all samples are included. Introns are automatically removed from the ORF (= x-axis).
 
 The output graph is saved as png file and as pdf file, with position along ORF [codon / aa] in x-axis  and enrichment in y-axis. The mean between two biological replicates is plotted as log2 transform (=black line) and the range between the two replicates is highlighted as grey area. Gaps represent codons or regions of codons that have no reads in either the total translatome sample or the selective translatome sample and can therefore not give an enrichment between selective and total data set or cannot be trans-formed to log2 scale.
 
-+Supplementary script F (Binding_Detection).
+## Supplementary script F (Binding_Detection).
+
 This script compares selective versus total translatomes for each gene and two replicates to identify regions, which are bound by the analyzed factor.
 
 The output is a text file with the following columns: 
@@ -208,7 +212,8 @@ maximal peak height
 average peak height
 ```
 
-+Supplementary script G (Metagene_ Profiles).
+## Supplementary script G (Metagene_ Profiles).
+
 This script performs the metagene analysis for a set of samples comprising 2 biological replicates of selective and total translatomes, each. The metagene profiles are plotted separately for each data set or showing the enrichment between selective and total translatome, the latter one in log2-scale.
 
 The output graphs are saved as png file and as pdf file with position along average ORF [nt] in x-axis and ribosome density (output graph 1) or enrichment (output graph 2) in y-axis.
