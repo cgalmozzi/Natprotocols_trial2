@@ -1,8 +1,8 @@
-#######################
-#                     #
-#    Gene_Profiles    #
-#                     #
-#######################
+#############################
+#                           #
+#    Transcript_Profiles    #
+#                           #
+#############################
 
 '''
 Created on Tue Sep 25 2018
@@ -11,12 +11,12 @@ Created on Tue Sep 25 2018
 -------------------------------------------------------------------------------
 DESCRIPTION
 
-This script generates an enrichment profile for each gene of the given 
-organism. All genes, even those with a read number lower than the given 
+This script generates an enrichment profile for each transcript of the given 
+organism. All transcripts, even those with a read number lower than the given 
 threshold (default: 64) in all samples are included. Introns are automatically 
-removed from the ORF (= x-axis). 
+removed(= x-axis). 
 
-The mean between two biological replicates is plotted as log2 transform (=black
+The mean between two biological replicates is plotted on a log2 scale (=black
 line) and the range between the two replicates is highlighted as grey area. 
 Gaps represent codons or regions of codons that have no reads in either the 
 total translatome sample or the selective translatome sample and can therefore 
@@ -27,6 +27,7 @@ formed to log2 scale.
 '''
 
 
+import argparse
 import os
 import pickle
 import matplotlib.pyplot as plt
@@ -54,7 +55,7 @@ def tranformToCodons(nt_list):
 def calculateRatio(ip, total):
     ''' This module calculates the ratio for each position of two given lists. 
     If the total is 0, the ratio is set to np.nan.
-    output: ratio_list (array-type)
+    output: ratio_list
     '''
     
     ratio_list = []
@@ -65,8 +66,7 @@ def calculateRatio(ip, total):
         except: 
             ratio = np.nan
         ratio_list.append(ratio)
-
-    ratio_list = np.array(ratio_list)        
+        
     return (ratio_list)
 
 
@@ -82,8 +82,7 @@ def removeZero(input_list):
             output_list.append(np.nan)
         else: 
             output_list.append(elem)
-    
-    output_list = np.array(output_list)    
+  
     return (output_list)
 
 
@@ -91,20 +90,20 @@ def removeZero(input_list):
 def geneProfiles(input_path, file_total1, file_total2, file_selec1, file_selec2, output_name): 
 
     # upload input data
-    total_1 = pickle.load(open(input_path + file_total1 + '_reads.pkl', 'rb'))
-    total_2 = pickle.load(open(input_path + file_total2 + '_reads.pkl', 'rb'))
-    selec_1 = pickle.load(open(input_path + file_selec1 + '_reads.pkl', 'rb'))
-    selec_2 = pickle.load(open(input_path + file_selec2 + '_reads.pkl', 'rb'))
+    total_1 = pickle.load(open(input_path + file_total1 + '_Reads.pkl', 'rb'))
+    total_2 = pickle.load(open(input_path + file_total2 + '_Reads.pkl', 'rb'))
+    selec_1 = pickle.load(open(input_path + file_selec1 + '_Reads.pkl', 'rb'))
+    selec_2 = pickle.load(open(input_path + file_selec2 + '_Reads.pkl', 'rb'))
 
     # reference files
     path_current = os.path.dirname(os.path.realpath(__file__))
     path_ref = path_current + '/references_yeast/'
-    dictGenes = pickle.load(open(path_ref + 'yeast_genes.pkl', 'rb'))
+    dictGenes = pickle.load(open(path_ref + 'yeast_transcripts.pkl', 'rb'))
     dictIntrons = pickle.load(open(path_ref + 'yeast_introns.pkl', 'rb'))
 
     # generate output folder
-    os.mkdir(input_path + output_name + '_gene profiles')
-    output_path = input_path + output_name + '_gene profiles/'
+    os.mkdir(input_path + output_name + '_TranscriptProfiles')
+    output_path = input_path + output_name + '_TranscriptProfiles/'
 
     for gene in dictGenes.keys():
 
@@ -130,6 +129,12 @@ def geneProfiles(input_path, file_total1, file_total2, file_selec1, file_selec2,
 
         ratio_1 = removeZero(calculateRatio(codon_selec1, codon_total1))
         ratio_2 = removeZero(calculateRatio(codon_selec2, codon_total2))
+        
+        if ratio_1.count(np.nan) == len(ratio_1):
+            continue
+        if ratio_2.count(np.nan) == len(ratio_2):
+            continue
+
         average = removeZero(np.nanmean(np.array([ratio_1, ratio_2]), axis = 0))
 
         # generate graph
@@ -140,7 +145,7 @@ def geneProfiles(input_path, file_total1, file_total2, file_selec1, file_selec2,
         mpl.rcParams['legend.fontsize'] = 8
 
         triv = dictGenes[gene][0]
-        filename = output_name + '_' + gene + ' ' + triv
+        filename = output_name + '_' + gene + '_' + triv
         figuretitle = gene + ' - ' + triv
 
         fig = plt.figure(1, figsize = (3.2, 1.6))
@@ -155,7 +160,7 @@ def geneProfiles(input_path, file_total1, file_total2, file_selec1, file_selec2,
                         labelbottom='on', 
                         direction = 'out', width = 0.64, length = 2.0)
 
-        x_label = 'position along ORF [codon / aa]'
+        x_label = 'position along transcript [codon / aa]'
         y_label = 'enrichment [a.u.]'
         ax.set_xlabel(x_label, fontsize = 8)
         ax.set_ylabel(y_label, fontsize = 8)
@@ -177,6 +182,32 @@ def geneProfiles(input_path, file_total1, file_total2, file_selec1, file_selec2,
 
 if __name__ == '__main__':
 
+    p = argparse.ArgumentParser(description='generation of transcript profiles of SeRP data sets')
+
+    # non-optional arguments
+    p.add_argument('file_total_1', type=str, help = 'sample name total translatome 1, without file extension')
+    p.add_argument('file_total_2', type=str, help = 'sample name total translatome 2, without file extension')
+    p.add_argument('file_selec_1', type=str, help = 'sample name selective translatome 1, without file extension')
+    p.add_argument('file_selec_2', type=str, help = 'sample name selective translatome 2, without file extension')
+    p.add_argument('output_name', type=str, help = 'unique experiment name, without file extension')
+    # optional arguments
+    p.add_argument('-i', '--input-path', dest = 'input_path', type=str, help = 'input path, default: cwd', default = os.getcwd() + '\\')
+
+    args = p.parse_args()
+
+    input_path = args.input_path
+    file_total1 = args.file_total_1
+    file_total2 = args.file_total_2
+    file_selec1 = args.file_selec_1
+    file_selec2 = args.file_selec_2
+    output_name = args.output_name
+
+    geneProfiles(input_path, file_total1, file_total2, file_selec1, file_selec2, output_name)
+
+'''
+>> to run this script via IDLE or another environment replace lines 181-199 by 
+the section given below and manually type in the respective arguments: 
+
     input_path = '/path/to/data/'               # e.g. 'C:/SeRP/sequencing/data/'
     file_total1 = 'sample name'                 # sample name total translatome 1 (no file extension)
     file_total2 = 'sample name'                 # sample name total translatome 2 (no file extension)
@@ -184,5 +215,4 @@ if __name__ == '__main__':
     file_selec2 = 'sample name'                 # sample name selective translatome 2 (no file extension)
     output_name = 'experiment name'             # experiment name (no file extension)
 
-    geneProfiles(input_path, file_total1, file_total2, file_selec1, file_selec2, output_name)
-
+'''

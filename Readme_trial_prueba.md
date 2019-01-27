@@ -218,6 +218,19 @@ This script performs the metagene analysis for a set of samples comprising 2 bio
 The output graphs are saved as png file and as pdf file with position along average ORF [nt] in x-axis and ribosome density (output graph 1) or enrichment (output graph 2) in y-axis.
 
 
+
+## Supplementary script H (Build_references).
+
+This script generates the required reference files for SeRP data analysis. 
+Input files are: 
+
+fasta file containing the sequence of each chromosome of the organism of interest
+--> S. cerevisiae data is downloaded from SGD ('S288C_reference_sequence_R64-2-1_20150113.fsa')
+
+text file containing all genes with additional information in tab separated format
+--> S. cerevisiae data from SGD, present as excel file ('yeast_transcripts.xlsx')
+
+
 # Citation
 1	Van Rossum, G. & de Boer, J. Interactively Testing Remote Servers Using the Python Programming Language, CWI Quarterly, 4, Issue 4, 283–303 (1991).
 

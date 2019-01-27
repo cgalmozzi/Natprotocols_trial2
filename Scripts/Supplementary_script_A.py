@@ -17,13 +17,15 @@ The input file is a sam file given by Tophat2 performing alignment to the genome
 Based on the reference files used for genome 
 alignment the function chromConversion must be adjusted. 
 
-The user can chose between the modes 'center' for center-weighting and '5-end' 
-for 5'-end assignment of the ribosomal A-site. Additionally, the upper and 
-lower border of accepted footprint lengths are given (including limits). 
+The user can choose between the modes 'center' for center-weighting and '5-end' 
+for 5'-end assignment of the ribosomal A-site. In case of '5-end' mode, a table
+(offset.txt) must be provided defining the offset for each footprint length.
+Additionally, the upper and lower border of accepted footprint lengths are 
+given (including limits). 
 
 
 
-The pickle file 'DictReads.pkl' is a combination of raw and normalized reads
+The pickle file 'Reads.pkl' is a combination of raw and normalized reads
 with the following structure: 
 key:      chrom --> position (e.g. '01\t0003467')
 value1:   raw read + strand  [0]
@@ -37,15 +39,16 @@ value8:   '\t'               [7]
 value9:   norm read - strand [8]
 
 
-The text file 'gene expression.txt' contains all genes, the sum of all reads 
-per gene [RPM], the gene length, and the normalized sum of all reads [RPKM]. 
-The tag 'included' or 'excluded' is added if the RPM-value is above or below 
-64 reads, respectively. 
+The text file 'GeneExpression.txt' contains all transcripts, the sum of all 
+reads per transcript [RPM], the transcript length, and the normalized sum of 
+all reads [RPKM]. The tag 'included' or 'excluded' is added if the RPM-value 
+is above or below the threshold (default: 64 reads), respectively. 
 
 
 
 '''
 
+import argparse
 import pickle
 import os
 from time import gmtime, strftime
@@ -71,16 +74,31 @@ def getReferenceFiles(path_current):
 
     path_ref = path_current + '/references_yeast/'
     dictReads = pickle.load(open(path_ref + 'yeast_sequence.pkl', 'rb'))
-    dictGenes = pickle.load(open(path_ref + 'yeast_genes.pkl', 'rb'))
+    dictGenes = pickle.load(open(path_ref + 'yeast_transcripts.pkl', 'rb'))
     dicttRNA = pickle.load(open(path_ref + 'yeast_tRNA.pkl', 'rb'))
     return (dictReads, dictGenes, dicttRNA)
 
+def getOffset(path_current):
+    ''' This module uploads the given offsets. '''
 
-def RibosomeAssignment(input_path, input_sample, output_path, output_sample, mode, limits, threshold):
+    path_ref = path_current + '/references_yeast/'
+    dictOffset = {}
+    with open(path_ref + 'offset.txt', 'r') as f:
+        for line in f: 
+            if not line.startswith('length'):
+                fields = line.split('\t')
+                dictOffset[int(fields[0])] = int(fields[1].strip()) 
+    return (dictOffset)
+
+
+
+def RibosomeAssignment(input_path, input_sample, output_path, output_sample, mode, limits, threshold, text):
 
     dictFragments = {key: 0 for key in range(1,101)}
     path_current = os.path.dirname(os.path.realpath(__file__))
     dictReads, dictGenes, dicttRNA = getReferenceFiles(path_current)
+    if mode == '5-end': 
+        dictOffset = getOffset(path_current)
 
     # open input file
     inSam = open(input_path + input_sample, 'r')
@@ -96,13 +114,13 @@ def RibosomeAssignment(input_path, input_sample, output_path, output_sample, mod
         leftPos = int(fields[3])
         length = len(fields[9])
         dictFragments[length] += 1
-
         if limits[0] <= length <= limits[1]:
             if mode == 'center':
                 start = leftPos + 11
                 stop = leftPos + length - 11
             elif mode == '5-end':
-                start = leftPos + 12 if strand == '+' else leftPos + length - 12
+                offset = dictOffset[length]
+                start = leftPos + offset if strand == '+' else leftPos + length - offset
                 stop = start + 1
             else: 
                 print ('Please define analysis mode - it can be \'center\' or \'5-end\'.\nCheck for tipos.\n')
@@ -177,20 +195,20 @@ def RibosomeAssignment(input_path, input_sample, output_path, output_sample, mod
     print (strftime('%a, %d %b %Y %H:%M:%S +0000', gmtime()))
 
     # write output file -- reads.pkl
-    file = open(output_path + output_sample + '_reads.pkl', 'wb')
+    file = open(output_path + output_sample + '_Reads.pkl', 'wb')
     pickle.dump(dictReads, file)
 
     # write output file -- footprint lengths.txt
     listFragments = list(dictFragments.keys())
     listFragments.sort()
-    with open(output_path + output_sample + '_footprint length.txt', 'w') as f:
+    with open(output_path + output_sample + '_FootprintLength.txt', 'w') as f:
         for length in listFragments:
             f.write(str(length) + '\t' + str(dictFragments[length]) + '\n')
 
     # write output file -- total reads.txt
     listTotal = list(dictTotalReads.keys())
     listTotal.sort()
-    with open(output_path + output_sample + '_total reads.txt', 'w') as f:
+    with open(output_path + output_sample + '_TotalReads.txt', 'w') as f:
         for i in listTotal: 
             f.write(str(i) + '\t' + str(dictTotalReads[i]) + '\n')
         f.write('total\t' + str(total) + '\n')
@@ -199,12 +217,24 @@ def RibosomeAssignment(input_path, input_sample, output_path, output_sample, mod
     # write output file -- GeneExpression*.txt
     listGenes = list(ge_data.keys())
     listGenes.sort()
-    with open(output_path + output_sample + '_gene expression.txt', 'w') as f:
+    with open(output_path + output_sample + '_GeneExpression.txt', 'w') as f:
+        f.write('systematic transcript name\texpression [RPM]\ttranscript length[nt]\texpression [RPKM]\tquality tag\n')
         for gene in listGenes:
             f.write(gene)
             for item in ge_data[gene]:
                 f.write('\t' + str(item))
             f.write('\n')            
+
+    # write text files if required
+    if text != 'no':
+        with open(output_path + output_sample + '_Reads.txt', 'w') as f:
+            listNorm = list(dictReads.keys())
+            listNorm.sort()
+            for pos in listNorm:
+                f.write(pos + '\t')
+                for item in dictReads[pos]:
+                    f.write(str(item))
+                f.write('\n')
 
     print ('Output files written:')
     print (strftime('%a, %d %b %Y %H:%M:%S +0000', gmtime()))
@@ -214,6 +244,37 @@ def RibosomeAssignment(input_path, input_sample, output_path, output_sample, mod
  
 if __name__ == '__main__':
 
+    p = argparse.ArgumentParser(description='ribosomal A-site assignment of ribosome profiling data')
+
+    # non-optional arguments
+    p.add_argument('input_name', type=str, help = 'full name of input sam file, with file extension')
+    p.add_argument('output_name', type=str, help = 'output sample name, NO file extension')
+    # optional arguments
+    p.add_argument('-i', '--input-path', dest = 'input_path', type=str, help = 'input path, default: cwd', default = os.getcwd() + '\\')
+    p.add_argument('-o', '--output-path', dest = 'output_path', type=str, help = 'output path, default: cwd', default = os.getcwd() + '\\')
+    p.add_argument('-m', '--mode', dest = 'mode', type=str, help = 'mode of ribosomal A-site assignment, default: 5-end', default = '5-end')
+    p.add_argument('-l', '--limits', dest ='limits', type=tuple, help = 'min and max length of ribosome footprints, default: (23,40)' , default = (23,40))
+    p.add_argument('-t', '--threshold', dest = 'threshold', type=float, help = 'minimal number of footprints per gene to be included in further analysis, default: 64.0', default = 64.0)
+    p.add_argument('-x', '--text', dest = 'text', type=str, help = 'required conversion of *_Reads.pkl to text file?, default: no', default = 'no')
+
+
+    args = p.parse_args()
+
+    input_path = args.input_path
+    input_sample = args.input_name
+    output_path = args.output_path
+    output_sample = args.output_name
+    mode = args.mode
+    limits = args.limits
+    threshold = args.threshold
+    text = args.text
+
+    RibosomeAssignment(input_path, input_sample, output_path, output_sample, mode, limits, threshold, text)
+
+'''
+>> to run this script via IDLE or another environment replace lines 212-232 by 
+the section given below and manually type in the respective arguments: 
+
     input_path = '/path/to/data/'               # e.g. 'C:/SeRP/sequencing/data/'
     input_sample = 'sample file.sam'            # e.g. 'Sample1_accepted_hits.sam'
     output_path = '/path/to/output/'            # e.g. 'C:/SeRP/analysis/
@@ -222,6 +283,6 @@ if __name__ == '__main__':
     mode = '5-end'                              # '5-end' or 'center'
     limits = (23, 40)                           # define the lower and upper border of allowed footprint lengths
     threshold = 64.0                            # minimal number of reads per gene to be "included"
-
-    RibosomeAssignment(input_path, input_sample, output_path, output_sample, mode, limits, threshold)
+    text = 'no'                                 # whether or not a text file version of *_Reads.pkl is required
+'''
 

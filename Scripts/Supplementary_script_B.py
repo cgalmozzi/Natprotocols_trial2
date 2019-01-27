@@ -11,7 +11,7 @@ Created on Mon Sep 24 2018
 -------------------------------------------------------------------------------
 DESCRIPTION
 
-This script calculates the average read density along all ORFs with nucleotide 
+This script calculates the average read density along all transcripts with nucleotide 
 resolution. From -9nt to +30nt around the translation start side, data are
 plotted as bar plot with every third nucleotide colored in green. This should 
 help to visualize and analyse the expected 3nt periodicity of every (selective)
@@ -28,16 +28,17 @@ import pickle
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+import argparse
 
-def calcPeriodicity(input_path, sample_name, threshold):
+def calcPeriodicity(input_path, sample_name, threshold, limits):
 
     # upload input data
-    dictReads = pickle.load(open(input_path + sample_name + '_reads.pkl', 'rb'))
+    dictReads = pickle.load(open(input_path + sample_name + '_Reads.pkl', 'rb'))
 
     # reference files
     path_current = os.path.dirname(os.path.realpath(__file__))
     path_ref = path_current + '/references_yeast/'
-    dictGenes = pickle.load(open(path_ref + 'yeast_genes.pkl', 'rb'))
+    dictGenes = pickle.load(open(path_ref + 'yeast_transcripts.pkl', 'rb'))
     dictIntrons = pickle.load(open(path_ref + 'yeast_introns.pkl', 'rb'))
 
     # process data
@@ -100,23 +101,23 @@ def calcPeriodicity(input_path, sample_name, threshold):
                     labelbottom='on', 
                     direction = 'out', width = 0.64, length = 2.0)
 
-    x_label = ('position along ORF [nt]')
+    x_label = ('position along transcript [nt]')
     y_label = ('average reads [a.u.]')
     ax.set_xlabel(x_label, fontsize = 8)
     ax.set_ylabel(y_label, fontsize = 8)
 
     y = []
-    for n in range(-9,31):
+    for n in range(limits[0]+1,limits[1]+1):
         meta_v = np.mean(dictMeta[n])
         y.append(meta_v)
     y = np.array(y)
-    x = np.arange(-9,31)
+    x = np.arange(limits[0]+1,limits[1]+1)
     ax.bar(x, y, align='center', color=['#999999', '#999999', '#00aa00'], width=0.6, linewidth=0)
-    ax.set_xlim(-10, 31)
+    ax.set_xlim(limits[0],limits[1]+1)
 
     # save graph
-    plt.savefig(input_path + sample_name + '_3 nt periodicity.png', bbox_inches='tight', dpi = 600)
-    plt.savefig(input_path + sample_name + '_3 nt periodicity.pdf', bbox_inches='tight')
+    plt.savefig(input_path + sample_name + '_3ntPeriodicity.png', bbox_inches='tight', dpi = 600)
+    plt.savefig(input_path + sample_name + '_3ntPeriodicity.pdf', bbox_inches='tight')
     plt.close()
 
     return
@@ -124,9 +125,32 @@ def calcPeriodicity(input_path, sample_name, threshold):
 
 if __name__ == '__main__':
 
+    p = argparse.ArgumentParser(description='testing 3 nt periodicity')
+
+    # non-optional arguments
+    p.add_argument('sample_name', type=str, help = 'full name of input sample file, without file extension')
+    # optional arguments
+    p.add_argument('-i', '--input-path', dest = 'input_path', type=str, help = 'input path, default: cwd', default = os.getcwd() + '\\')
+    p.add_argument('-t', '--threshold', dest = 'threshold', type=float, help = 'minimal number of footprints per gene to be included in this analysis, default: 64.0', default = 64.0)
+    p.add_argument('-l', '--limits', dest ='limits', type=tuple, help = 'limits of the plotted region around start codon, default: (-10,50)' , default = (-10,50))
+
+    args = p.parse_args()
+
+    input_path = args.input_path
+    sample_name = args.sample_name
+    threshold = args.threshold
+    limits = args.limits
+
+    calcPeriodicity(input_path, sample_name, threshold, limits)
+
+'''
+>> to run this script via IDLE or another environment replace lines 122-136 by 
+the section given below and manually type in the respective arguments: 
+
     input_path = '/path/to/data/'               # e.g. 'C:/SeRP/sequencing/data/'
     sample_name = 'sample name'                 # e.g. 'S1' (no filename extension)
     threshold = 64.0                            # minimal number of reads per gene to be included
+    limits = (-10,50)                           # limits of plotted region around start codon
 
-    calcPeriodicity(input_path, sample_name, threshold)
 
+'''

@@ -14,14 +14,17 @@ DESCRIPTION
 This script performes the metagene analysis for a set of samples comprising 
 2 biological replicates of selective and total translatomes, each. 
 The metagene profiles are plotted separately for each data set or showing the 
-enrichment between selective and total translatome, the latter one in log2-
-scale.  
+enrichment between selective and total translatome, the latter one in log2 
+scale. 
+Furthermore, the earlier defined threshold of the minimal number of reads per 
+transcripts (default: 64 reads) must be set again, if not 64.  
 
 The graph is saved as png file and as pdf file. 
 
 
 '''
 
+import argparse
 import os
 import re
 import pickle
@@ -50,15 +53,15 @@ def removeZero(input_list):
 def metageneProfiles(input_path, file_total1, file_total2, file_selec1, file_selec2, output_name, threshold):
 
     # upload input data
-    total_1 = pickle.load(open(input_path + file_total1 + '_reads.pkl', 'rb'))
-    total_2 = pickle.load(open(input_path + file_total2 + '_reads.pkl', 'rb'))
-    selec_1 = pickle.load(open(input_path + file_selec1 + '_reads.pkl', 'rb'))
-    selec_2 = pickle.load(open(input_path + file_selec2 + '_reads.pkl', 'rb'))
+    total_1 = pickle.load(open(input_path + file_total1 + '_Reads.pkl', 'rb'))
+    total_2 = pickle.load(open(input_path + file_total2 + '_Reads.pkl', 'rb'))
+    selec_1 = pickle.load(open(input_path + file_selec1 + '_Reads.pkl', 'rb'))
+    selec_2 = pickle.load(open(input_path + file_selec2 + '_Reads.pkl', 'rb'))
 
     # reference files
     path_current = os.path.dirname(os.path.realpath(__file__))
     path_ref = path_current + '/references_yeast/'
-    dictGenes = pickle.load(open(path_ref + 'yeast_genes.pkl', 'rb'))
+    dictGenes = pickle.load(open(path_ref + 'yeast_transcripts.pkl', 'rb'))
     dictIntrons = pickle.load(open(path_ref + 'yeast_introns.pkl', 'rb'))
 
     # process data
@@ -190,7 +193,7 @@ def metageneProfiles(input_path, file_total1, file_total2, file_selec1, file_sel
                     bottom='on', top='off',
                     labelbottom='on', 
                     direction = 'out', width = 0.64, length = 2.0)
-    x_label = ('position along average ORF [nt]')
+    x_label = ('position along average transcript [nt]')
     y_label = ('ribosome density [a.u.]')
     ax.set_ylabel(y_label, fontsize = 8)
     ax.set_xlim(-20, 500)   
@@ -233,6 +236,34 @@ def metageneProfiles(input_path, file_total1, file_total2, file_selec1, file_sel
 
 if __name__ == '__main__':
 
+    p = argparse.ArgumentParser(description='metagene analysis of SeRP data sets')
+
+    # non-optional arguments
+    p.add_argument('file_total_1', type=str, help = 'sample name total translatome 1, without file extension')
+    p.add_argument('file_total_2', type=str, help = 'sample name total translatome 2, without file extension')
+    p.add_argument('file_selec_1', type=str, help = 'sample name selective translatome 1, without file extension')
+    p.add_argument('file_selec_2', type=str, help = 'sample name selective translatome 2, without file extension')
+    p.add_argument('output_name', type=str, help = 'unique experiment name, without file extension')
+    # optional arguments
+    p.add_argument('-i', '--input-path', dest = 'input_path', type=str, help = 'input path, default: cwd', default = os.getcwd() + '\\')
+    p.add_argument('-t', '--threshold', dest = 'threshold', type=float, help = 'minimal number of footprints per gene to be included in further analysis, default: 64.0', default = 64.0)
+
+    args = p.parse_args()
+
+    input_path = args.input_path
+    file_total1 = args.file_total_1
+    file_total2 = args.file_total_2
+    file_selec1 = args.file_selec_1
+    file_selec2 = args.file_selec_2
+    output_name = args.output_name
+    threshold = args.threshold
+
+    metageneProfiles(input_path, file_total1, file_total2, file_selec1, file_selec2, output_name, threshold)
+
+'''
+>> to run this script via IDLE or another environment replace lines 237-257 by 
+the section given below and manually type in the respective arguments: 
+
     input_path = '/path/to/data/'               # e.g. 'C:/SeRP/sequencing/data/'
     file_total1 = 'sample name'                 # sample name total translatome 1 (no file extension)
     file_total2 = 'sample name'                 # sample name total translatome 2 (no file extension)
@@ -241,5 +272,4 @@ if __name__ == '__main__':
     output_name = 'experiment name'             # experiment name (no file extension)
     threshold = 64.0
 
-    metageneProfiles(input_path, file_total1, file_total2, file_selec1, file_selec2, output_name, threshold)
-
+'''
