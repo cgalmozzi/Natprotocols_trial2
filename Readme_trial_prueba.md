@@ -131,7 +131,7 @@ The expected run time for a demo on a recommended computer is approximately half
 
 # Expected output
 
-+Supplementary script A (Ribosome_Assignment).	
+*Supplementary script A (Ribosome_Assignment).	
 This script performs the general analysis of selective riboSeq data. Deep sequencing data must be (quality) trimmed and aligned first. The input file is a sam file (see provided data) given by Tophat2 performing alignment to the genome.  Based on the reference files used for genome alignment the function chromConversion must be adjusted.
 
 The output pickle file 'DictReads.pkl' is a combination of raw and normalized reads
