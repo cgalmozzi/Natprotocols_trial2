@@ -15,7 +15,7 @@
 
 # Overview
 
-Analysis of the generated SeRP data starts by employing publicly available as well as customized read processing and alignment tools that are generally used for RP analysis. SeRP-specific tools are used in subsequent steps for identifying substrates and for the characterization of factor-specific binding properties. Here we provide a number of python scripts for initial analysis of SeRP data sets, which can be run on standard desktop computers. However initial analyses can also be done using alternative tools provided by web-based platforms like RiboGalaxy (https://ribogalaxy.ucc.ie/)^1 and Trips-Viz (https://trips.ucc.ie/)^2. 
+Analysis of the generated SeRP data starts by employing publicly available as well as customized read processing and alignment tools that are generally used for RP analysis. SeRP-specific tools are used in subsequent steps for identifying substrates and for the characterization of factor-specific binding properties. Here we provide a number of python scripts for initial analysis of SeRP data sets, which can be run on standard desktop computers. However initial analyses can also be done using alternative tools provided by web-based platforms like RiboGalaxy (https://ribogalaxy.ucc.ie/)(1) and Trips-Viz (https://trips.ucc.ie/)(2). 
 
 # Scripts
 
@@ -27,7 +27,7 @@ Supplementary script D (Total_Enrichment).
 Supplementary script E (Gene_Profiles).
 Supplementary script F (Binding_Detection).
 Supplementary script G (Metagene_Profiles).
-Supplementary script H (build_references)
+Supplementary script H (Build_references)
 
 ```
 
@@ -46,7 +46,7 @@ yeast_tRNA.pkl
 # System Requirements
 
 ## Hardware Requirements
-Python is a powerful dynamic, extensible, interpreted, object-orientated and interactive programming language. It is considered a very high level programming language, whose design philosophy encourages code readability and maintainability ^3.
+Python is a powerful dynamic, extensible, interpreted, object-orientated and interactive programming language. It is considered a very high level programming language, whose design philosophy encourages code readability and maintainability (3).
 Installation of Python requires only a standard computer with enough RAM to support the operations defined by a user. For minimal performance, this will be a computer with about 8 GB of RAM. For optimal performance, we recommend a computer with RAM: 16+ GB.
 
 
@@ -113,6 +113,7 @@ The Python installation should take approximately 1-2 hours to install on a reco
 -python Supplementary_script_A.py sample4.sam sample4
 -python Supplementary_script_B.py sample1
 -python Supplementary_script_B.py sample2
+-python Supplementary_script_B.py sample3
 -python Supplementary_script_B.py sample4
 
 ```
@@ -233,11 +234,11 @@ text file containing all genes with additional information in tab separated form
 
 # Citation
 
-1	Michel, A. M. et al. RiboGalaxy: A browser based platform for the alignment, analysis and visualization of ribosome profiling data. RNA Biol 13, 316-319, doi:10.1080/15476286.2016.1141862 (2016).
+(1) Michel, A. M. et al. RiboGalaxy: A browser based platform for the alignment, analysis and visualization of ribosome profiling data. RNA Biol 13, 316-319, doi:10.1080/15476286.2016.1141862 (2016).
 
+(2)Kiniry, Stephen J et al. “Trips-Viz: a transcriptome browser for exploring Ribo-Seq data” Nucleic acids research vol. 47,D1 847-852. doi.org/10.1093/nar/gky842 (2018).
 
-
-1	Van Rossum, G. & de Boer, J. Interactively Testing Remote Servers Using the Python Programming Language, CWI Quarterly, 4, Issue 4, 283–303 (1991).
+(3)	Van Rossum, G. & de Boer, J. Interactively Testing Remote Servers Using the Python Programming Language, CWI Quarterly, 4, Issue 4, 283–303 (1991).
 
 # License
 
