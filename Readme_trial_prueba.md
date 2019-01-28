@@ -157,7 +157,7 @@ These four files serve as input files for the following scripts.
 
 ## Supplementary script B (3_nt_Periodicity).
 
-This script calculates the average read density along all ORFs with nucleotide resolution. From -9nt to +30nt around the translation start side, data are plotted as bar plot with every third nucleotide colored in green. This should 
+This script calculates the average read density along all ORFs with nucleotide resolution. From -9nt to +50nt around the translation start side, data are plotted as bar plot with every third nucleotide colored in green. This should 
 help to visualize and analyse the expected 3nt periodicity of every (selective) ribosome profiling sample. 
 
 The output graph is saved as png file and as pdf file, with position along ORF [nt] in x-axis and average reads [a.u.]in y-axis.
