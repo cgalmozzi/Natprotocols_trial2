@@ -15,7 +15,7 @@
 
 # Overview
 
-Analysis of the generated SeRP data starts by employing publicly available as well as customized read processing and alignment tools that are generally used for RP analysis. SeRP-specific tools are used in subsequent steps for identifying substrates and for the characterization of factor-specific binding properties. Here we provide a number of python scripts for initial analysis of SeRP data sets, which can be run on standard desktop computers. However initial analyses can also be done using alternative tools provided by web-based platforms like RiboGalaxy (https://ribogalaxy.ucc.ie/)(1) and Trips-Viz (https://trips.ucc.ie/)(2). 
+Analysis of the generated SeRP data starts by employing publicly available as well as customized read processing and alignment tools that are generally used for RP analysis. SeRP-specific tools are used in subsequent steps for identifying substrates and for the characterization of factor-specific binding properties. Here we provide a number of python scripts for initial analysis of SeRP data sets, which can be run on standard desktop computers. However initial analyses can also be done using alternative tools provided by web-based platforms like RiboGalaxy (https://ribogalaxy.ucc.ie/) (1) and Trips-Viz (https://trips.ucc.ie/) (2). 
 
 # Scripts
 
