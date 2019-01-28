@@ -46,7 +46,7 @@ yeast_tRNA.pkl
 # System Requirements
 
 ## Hardware Requirements
-Python is a powerful dynamic, extensible, interpreted, object-orientated and interactive programming language. It is considered a very high level programming language, whose design philosophy encourages code readability and maintainability^3.
+Python is a powerful dynamic, extensible, interpreted, object-orientated and interactive programming language. It is considered a very high level programming language, whose design philosophy encourages code readability and maintainability ^3.
 Installation of Python requires only a standard computer with enough RAM to support the operations defined by a user. For minimal performance, this will be a computer with about 8 GB of RAM. For optimal performance, we recommend a computer with RAM: 16+ GB.
 
 
