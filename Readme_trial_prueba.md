@@ -151,7 +151,7 @@ value8:   '\t'               [7]
 value9:   norm read - strand [8]
 
 ```
-Three output text files containing information on the footprint length distribution (<sample>_footprint length.txt), the number of reads per chromosome, the number of all reads (<sample>_total reads.txt) and the gene expression (<sample>_gene expression.txt). The text file 'gene expression.txt' contains all genes, the sum of all reads per gene [RPM], the gene length, and the normalized sum of all reads [RPKM]. The tag 'included' or 'excluded' is added if the RPM-value is above or below 64 reads, respectively. 
+Three output text files containing information on the footprint length distribution (<sample>_footprint length.txt), the number of reads per chromosome, the number of all reads (<sample>_total reads.txt) and the gene expression (<sample>_GeneExpression.txt). The text file 'GeneExpression.txt' contains all genes, the sum of all reads per gene [RPM], the gene length, and the normalized sum of all reads [RPKM]. The tag 'included' or 'excluded' is added if the RPM-value is above or below 64 reads, respectively. 
 
 These four files serve as input files for the following scripts.
 
