@@ -11,7 +11,7 @@
 - [Demo](#demo)
 - [Expected output](#Expected-output)
 - [Citation](#citation)
-- [License](./LICENSE)
+- [License](#License)
 
 # Overview
 
@@ -236,7 +236,7 @@ text file containing all genes with additional information in tab separated form
 
 (1) Michel, A. M. et al. RiboGalaxy: A browser based platform for the alignment, analysis and visualization of ribosome profiling data. RNA Biol 13, 316-319, doi:10.1080/15476286.2016.1141862 (2016).
 
-(2)Kiniry, Stephen J et al. “Trips-Viz: a transcriptome browser for exploring Ribo-Seq data” Nucleic acids research vol. 47,D1 847-852. doi.org/10.1093/nar/gky842 (2018).
+(2) Kiniry, Stephen J et al. “Trips-Viz: a transcriptome browser for exploring Ribo-Seq data” Nucleic acids research vol. 47,D1 847-852. doi.org/10.1093/nar/gky842 (2018).
 
 (3)	Van Rossum, G. & de Boer, J. Interactively Testing Remote Servers Using the Python Programming Language, CWI Quarterly, 4, Issue 4, 283–303 (1991).
 
