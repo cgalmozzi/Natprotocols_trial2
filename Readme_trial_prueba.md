@@ -34,11 +34,16 @@ Supplementary script H (Build_references)
 # Reference files
 
 ```
+
+offset.txt
+rna_coding_R64-2-1_20150113.fasta
+S288C_reference_sequence_R64-2-1_20150113.fsa
 yeast_cds_all.txt
-yeast_genes_with_introns.txt
-yeast_genes.pkl
 yeast_introns.pkl
 yeast_sequence.pkl
+yeast_transcripts.pkl
+yeast_transcripts.txt
+yeast_transcripts.xlsx
 yeast_tRNA.pkl
 
 ```
