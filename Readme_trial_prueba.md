@@ -19,6 +19,8 @@ Analysis of the generated SeRP data starts by employing publicly available as we
 
 # Scripts
 
+- [Scripts](./Scripts): Scripts.
+
 ```
 Supplementary script A (Ribosome_Assignment).
 Supplementary script B (3_nt_Periodicity).
