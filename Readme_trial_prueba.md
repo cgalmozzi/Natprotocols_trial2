@@ -249,6 +249,8 @@ text file containing all genes with additional information in tab separated form
 
 # License
 
+- [License](./Scripts)
+
 GNU GENERAL PUBLIC LICENSE
 Version 3, 29 June 2007
 
